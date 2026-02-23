@@ -13,10 +13,7 @@
       "name": "decipher-gas-optimizoor",
       "version": "1.0.0",
       "description": "Automated gas optimization and regression detection for Foundry-based Solidity projects",
-      "source": {
-        "source": "github",
-        "repo": "zaryab2000/decipher-gas-optimizoor"
-      },
+      "source": "./",
       "tags": [
         "solidity",
         "gas",
