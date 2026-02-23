@@ -17,7 +17,9 @@ DIFF_OUTPUT=$(forge snapshot --diff "$SNAPSHOT_PATH" 2>&1) || {
 
 REGRESSIONS=""
 while IFS= read -r line; do
-  if [[ "$line" =~ \+([0-9]+)\ gas ]]; then
+  # Match forge snapshot --diff output: "↑ Test::fn() (gas: N → M | DELTA pct%)"
+  # The ↑ character indicates an increase; extract DELTA from "| DELTA pct%"
+  if [[ "$line" =~ ^\↑ && "$line" =~ \|[[:space:]]([0-9]+)[[:space:]] ]]; then
     GAS_DELTA="${BASH_REMATCH[1]}"
     if (( GAS_DELTA > THRESHOLD )); then
       REGRESSIONS="${REGRESSIONS}  ${line}\n"
