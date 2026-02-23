@@ -1,1 +1,4 @@
 docs-internal
+.DS_Store
+*.swp
+*.swo
