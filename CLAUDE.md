@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `decipher-gas-optimizoor` is a Claude Code plugin for automated Solidity gas optimization. Zero TypeScript, zero MCP, zero npm. The entire plugin is markdown skill files, markdown command files, and one bash hook script.
 
-**Source of truth for all implementation:** `PRD_DEV.md` (phases 1–5) and `PRD_TEST.md` (phases 6–8). Read these fully before making any changes.
+**Implementation history:** `docs-internal/PRD_DEV.md` (phases 1–5) and `docs-internal/PRD_TEST.md` (phases 6–8). These are read-only references — implementation is complete.
 
 ## Validation
 
@@ -27,7 +27,7 @@ skills/                  # 11 skill domains, each in its own subdirectory
 hooks/
   hooks.json             # PostToolUse triggers on src/**/*.sol Write/Edit
   scripts/gas-regression-guard.sh
-agents/                  # editor.md, gas-optimizer.md
+agents/                  # gas-optimizer.md
 docs/                    # configuration.md, evm-gas-reference.md
 ```
 
@@ -70,19 +70,21 @@ Depth goes in `resources/`, not in `SKILL.md`. Keep SKILL.md ≤250 lines.
 
 11 domains, each a separate skill: `storage-layout` (SL), `loop-optimization` (LO), `calldata` (CD), `deployment` (DP), `type-optimization` (TY), `custom-errors` (CE), `compiler-optimizer` (CO), `immutable-and-constant` (IC), `unchecked-arithmetic` (UA), `visibility` (VI), `event-logging` (EV).
 
-Do not invent gas rules. All content must be derived from `skills/GAS_OPTIMIZATION_KNOWLEDGE_BASE.md`.
+Do not invent gas rules. All gas optimization content must be grounded in documented EVM mechanics (EIP-2929, EIP-1153, EIP-3529) and verifiable with `forge snapshot --diff`.
 
-## Testing Gates (PRD_TEST.md)
+## Testing Gates
 
-Six gates must all pass before distribution:
-- **G1** — `claude plugin validate .` zero errors
-- **G2** — Hook exits 0 in all 4 conditions (no forge, no baseline, no regression, regression detected)
-- **G3** — All 5 commands produce output matching their format templates
-- **G4** — Each skill fires on its anti-pattern, does not fire when domain is absent
-- **G5** — Complex `GasAntiPatterns.sol` fixture triggers ≥6 distinct domain findings with gas estimates
-- **G6** — Regression guard fires on every `.sol` save, clears after fix
+All gates passed. See `docs/TEST_LOGS.md` for full results.
+
+| Gate | What | Status |
+|------|------|--------|
+| G1 | `claude plugin validate .` zero errors | ✅ PASS |
+| G2 | Hook exits 0 in all 5 conditions | ✅ PASS |
+| G3 | All 5 commands produce correct output | ✅ PASS |
+| G4 | Each skill fires on its anti-pattern | ✅ PASS |
+| G5 | `GasAntiPatterns.sol` triggers ≥6 domain findings | ✅ PASS (8 findings) |
+| G6 | Regression guard fires and clears correctly | ✅ PASS |
 
 ## Current State
 
-Implementation complete. Plugin structure built across Phases 1–5 per PRD_DEV.md.
-Execute PRD_TEST phases 6–8 to validate and release.
+Implementation and testing complete. Awaiting author sign-off before Phase 8 (publish).

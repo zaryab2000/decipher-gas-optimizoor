@@ -88,6 +88,16 @@ forge test --match-test <testName> -vvvv | grep SLOAD
   converting to `do-while` (LO-005). If any `if`/`require` in or around the loop uses `&&` with an
   expensive left-hand condition, flag as LO-006.
 
+## Supporting Docs
+
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | Encountering an LO-004/LO-005/LO-006 edge case not covered by the Quick Reference above |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-pattern loop finding |
+
 ## Output Format
 
 For each finding, produce:

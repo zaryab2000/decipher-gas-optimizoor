@@ -145,6 +145,16 @@ TY-002 | ERC20Token.sol:6 | string public symbol
   SLOADs per read.
 ```
 
+## Supporting Docs
+
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need TY-004 (redundant downcast) edge cases or a TY-003 bitmap encoding example beyond what's shown above |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all type patterns were checked |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-type finding |
+
 **Example finding (TY-001 — uint256 for loop counter):**
 
 ```

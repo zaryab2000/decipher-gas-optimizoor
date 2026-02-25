@@ -69,30 +69,15 @@ nearby could have been packed alongside it.
 
 ### Step 5: Analyze
 
-Apply all gas optimization knowledge to identify issues across these categories. Suppress
-any finding whose estimated gas saving is below `--threshold`:
+Apply all relevant gas optimization skills to identify issues. Each skill handles its
+own domain — do not duplicate their detection logic here. Suppress any finding whose
+estimated gas saving is below `--threshold`.
 
-1. **Storage layout** — wasted slots; struct fields not grouped by size; address not
-   packed with uint96; repeated SLOAD of the same variable within a function; the same
-   variable written multiple times in one function without a local cache.
-
-2. **Loop inefficiency** — loop condition reads `array.length` from storage on every
-   iteration; storage variable read inside a loop without caching before the loop.
-
-3. **String reverts** — `require(condition, "string")` or `revert("string")` where a
-   custom error would suffice.
-
-4. **Visibility** — `public` functions whose callers are all external (never called
-   internally); `public` functions with reference-type parameters where `external` +
-   `calldata` would eliminate a memory copy.
-
-5. **Immutable/constant opportunities** — state variables assigned only in the
-   constructor and never changed; string or bytes32 literals hashed at runtime with
-   `keccak256("literal")` that could be a `constant`.
-
-6. **Unchecked arithmetic** — arithmetic inside loops where overflow is provably
-   impossible (e.g., loop counter bounded by array length); subtraction where the
-   minuend is already verified to be >= the subtrahend.
+The active skills cover: storage-layout (SL-001–010), loop-optimization (LO-001–006),
+calldata (CD-001–004), deployment (DP-001–004), type-optimization (TY-001–004),
+custom-errors (CE-001–003), compiler-optimizer (CO-001–003),
+immutable-and-constant (IC-001–003), unchecked-arithmetic (UA-001–002),
+visibility (VI-001–002), event-logging (EV-001–002).
 
 ### Step 6: Output report
 

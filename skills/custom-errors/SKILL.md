@@ -116,5 +116,10 @@ encodes only its 4-byte selector. The string is also stored in contract bytecode
 
 ## 8. Supporting Docs
 
-- Need conversion patterns for all three CE variants? → Read: `resources/PATTERNS.md`
-- Unsure what a complete finding looks like for a full contract? → Read: `resources/EXAMPLE_FINDING.md`
+Only read these files when explicitly needed — do not load both by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need CE-003 typed-context examples or library/interface edge cases not covered above |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming every require/revert was audited |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-error contract finding |

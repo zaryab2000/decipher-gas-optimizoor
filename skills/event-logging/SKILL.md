@@ -73,6 +73,16 @@ declarations without `indexed` parameters on address/uint256/bytes32 fields.
    original value unrecoverable from the topic). Do not index fields that are
    never used as filter criteria in off-chain queries.
 
+## Supporting Docs
+
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need EV-002 indexed topic cost calculations or The Graph query impact examples |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all storage arrays were audited |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a history-array finding |
+
 ## Output Format
 
 Report each finding with: pattern ID, storage variable or event name, file and

@@ -1,103 +1,50 @@
-# Visibility Skill — Pattern Reference
+# Visibility Patterns — Quick Reference
 
 ## VI-001: public → external (no internal callers)
 
-**Trigger:** `public` function never called from within the same contract body.
-
-**Before (simple params):**
 ```solidity
-// ~24 gas wasted per call on ABI dispatcher internal entry point
-function mint(address to, uint256 tokenId) public {
-    tokenOwner[tokenId] = to;
-}
+// BEFORE: public generates two entry points (external + internal ABI)
+function transfer(address to, uint256 amount) public { ... }
+function batchTransfer(uint256[] memory ids, address to) public { ... }
+
+// AFTER: external + calldata (combine with CD-001 for reference params)
+function transfer(address to, uint256 amount) external { ... }
+function batchTransfer(uint256[] calldata ids, address to) external { ... }
+// ~24 gas saved (simple params) | thousands saved (array params via calldata)
 ```
 
-**After:**
-```solidity
-// external: no internal entry point generated
-function mint(address to, uint256 tokenId) external {
-    tokenOwner[tokenId] = to;
-}
-```
-**Gas saving:** ~24 gas per call (dispatcher overhead eliminated).
-
----
-
-## VI-001 + CD-001: Always apply together for reference-type parameters
-
-**Before (array params):**
-```solidity
-// public + memory: copies entire array from calldata to memory (~3 gas/byte)
-function batchTransfer(uint256[] memory ids, address to) public {
-    for (uint256 i = 0; i < ids.length; ++i) {
-        tokenOwner[ids[i]] = to;
-    }
-}
+**Confirm no internal callers before changing:**
+```bash
+rg "transfer\(" --type sol  # no bare calls inside same contract
 ```
 
-**After:**
-```solidity
-// external + calldata: no copy, reads directly from calldata
-function batchTransfer(uint256[] calldata ids, address to) external {
-    uint256 len = ids.length;
-    for (uint256 i = 0; i < len; ++i) {
-        tokenOwner[ids[i]] = to;
-    }
-}
-```
-**Gas saving:** ~24 gas (dispatcher) + ~3 gas/byte of array (copy eliminated).
-For a 30-element `uint256[]` (960 bytes): ~2,904 gas saved per call.
+**Must stay public when:**
+- Called internally as `functionName(args)` (bare call = internal dispatch)
+- Called as `this.functionName(args)` — this is an external call but must stay public
+- Required by an interface that specifies `public`
 
----
-
-## VI-002: Remove duplicate manual getter
-
-**Trigger:** `view` function whose entire body is `return stateVar[param]` or
-`return stateVar` where `stateVar` is already declared `public`.
-
-**Before:**
-```solidity
-mapping(address => uint256) public balances;  // auto-generates balances(address) getter
-
-// Duplicate: same ABI as the auto-getter, but adds bytecode
-function getBalance(address user) public view returns (uint256) {
-    return balances[user];
-}
-```
-
-**After:**
-```solidity
-mapping(address => uint256) public balances;
-// No getBalance — callers use balances(user) directly
-```
-**Gas saving:** ~200–1,000 gas at deployment (bytecode reduced); zero runtime impact.
-
----
-
-## Exception patterns — do NOT remove manual getters when:
+## VI-002: Remove duplicate manual getters
 
 ```solidity
-// KEEP: adds access control the auto-getter lacks
-function getBalance(address user) external view onlyOwner returns (uint256) {
-    return balances[user];
+// BEFORE: manual getter duplicates auto-generated one
+address public owner;  // Solidity already generates owner() getter
+
+function getOwner() external view returns (address) {
+    return owner;  // VI-002: redundant — callers can call owner() directly
 }
 
-// KEEP: converts the type
-function getBalance(address user) external view returns (uint128) {
-    return uint128(balances[user]);
-}
-
-// KEEP: interface requires a different name (ERC-20 balanceOf vs storage balances)
-function balanceOf(address user) external view returns (uint256) {
-    return balances[user];
-}
+// AFTER: delete getOwner() entirely
+// Callers use auto-generated owner() getter at no extra cost
 ```
 
----
+Applies when: a `view` function's entire body is `return stateVar` or `return mapping[param]`
+and the state variable is already `public`.
 
-## Reference: public vs external dispatch
+## Gas savings
 
-| Visibility | Calldata behavior | Internal call | Bytecode |
-|---|---|---|---|
-| `public` | Copies ref-types to memory | Yes | Larger (2 entry points) |
-| `external` | Reads directly from calldata | No | Smaller (1 entry point) |
+| Scenario | Saving |
+|---|---|
+| `external` over `public`, simple params | ~24 gas/call |
+| `external` + `calldata` for 10-element array | ~960 gas/call |
+| `external` + `calldata` for 7-field struct | ~672 gas/call |
+| Remove duplicate getter | Bytecode reduction only (one-time) |

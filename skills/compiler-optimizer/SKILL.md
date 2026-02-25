@@ -102,6 +102,16 @@ range (`^0.8.0`).
    For `via_ir`, note the compile-time tradeoff and recommend enabling only in
    the production profile.
 
+## Supporting Docs
+
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need the break-even calculation formula or full multi-profile `foundry.toml` examples beyond what's shown above |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all compiler settings were reviewed |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for an optimizer configuration finding |
+
 ## Output Format
 
 Report each finding with: pattern ID, config key, current value, recommended
