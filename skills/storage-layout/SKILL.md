@@ -226,9 +226,10 @@ struct Position {
 
 ## 9. Supporting Docs
 
-| File | When to read |
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
 |---|---|
-| `resources/PATTERNS.md` | For detailed code examples of all 10 SL techniques with exact gas numbers |
-| `resources/CHECKLIST.md` | Run before marking a storage-layout review complete |
-| `resources/EXAMPLE_FINDING.md` | Reference a complete worked finding for a DeFi vault contract |
-| `skills/storage-layout.md` | The authoritative knowledge base — check when gas figures are uncertain |
+| `resources/PATTERNS.md` | You encounter an SL pattern (SL-004 through SL-010) not covered by the Quick Reference above, or need to verify an edge case |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and need to confirm completeness |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and need the exact output format for a multi-finding DeFi vault example |

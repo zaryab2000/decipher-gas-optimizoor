@@ -97,6 +97,16 @@ Is the function marked public with no internal callers?
   `uint8`/`uint16`/`uint32`/`uint64` parameter used only in arithmetic (never stored in a packed
   struct), change to `uint256` (CD-003).
 
+## Supporting Docs
+
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need CD-003 bitmap encoding details or a CD-004 edge case not in the Quick Reference |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-param struct/array finding |
+
 ## Output Format
 
 For each finding, produce:

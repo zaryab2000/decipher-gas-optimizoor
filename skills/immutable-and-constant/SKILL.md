@@ -148,6 +148,10 @@ functions called 200 times per day, declaring `owner` immutable saves
 
 ## 8. Supporting Docs
 
-- Need code examples for all three IC patterns? → Read: `resources/PATTERNS.md`
-- Unsure what a complete finding looks like for a staking/vault contract? → Read:
-  `resources/EXAMPLE_FINDING.md`
+Only read these files when explicitly needed — do not load both by default:
+
+| File | Read only when… |
+|---|---|
+| `resources/PATTERNS.md` | You need IC-003 hot-path examples or edge cases (e.g., immutable in library vs contract) not in the Quick Reference |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-variable vault finding |

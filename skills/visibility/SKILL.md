@@ -140,9 +140,10 @@ function batchTransfer(uint256[] calldata ids, address to) external {
 
 ## 8. Supporting Docs
 
-| File | When to read |
+Only read these files when explicitly needed — do not load all three by default:
+
+| File | Read only when… |
 |---|---|
-| `resources/PATTERNS.md` | Detailed code examples of VI-001 and VI-002 with exact gas numbers |
-| `resources/CHECKLIST.md` | Run before marking a visibility review complete |
-| `resources/EXAMPLE_FINDING.md` | Complete worked finding for an NFT contract |
-| `skills/visibility.md` | Authoritative knowledge base — verify gas figures here |
+| `resources/PATTERNS.md` | You need VI-001 gas savings for large array parameters (>10 elements) or the VI-002 inheritance edge case |
+| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all public functions were audited |
+| `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-function NFT contract finding |
