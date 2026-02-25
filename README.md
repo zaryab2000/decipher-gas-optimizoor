@@ -232,15 +232,15 @@ On every `.sol` save, the hook runs `forge snapshot --diff` against the committe
 
 **No regression:**
 ```
-GAS_GUARD: ✅ No regressions above 500 gas
+GAS_GUARD: No regressions above 500 gas
 ```
 
 **Regression detected:**
 ```
-GAS_GUARD: ⛽ REGRESSION DETECTED
-GAS_GUARD: ─────────────────────────────────────────
-  VaultTest:testDeposit() (gas: +1,240)
-GAS_GUARD: ─────────────────────────────────────────
+GAS_GUARD: REGRESSION DETECTED
+GAS_GUARD: -----------------------------------------
+  ↑ VaultTest::testDeposit() (gas: 38400 → 39640 | 1240 3.228%)
+GAS_GUARD: -----------------------------------------
 GAS_GUARD: Threshold: 500 gas | Run /gas:analyze to investigate
 ```
 

@@ -97,6 +97,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | Encountering an LO-004/LO-005/LO-006 edge case not covered by the Quick Reference above |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-pattern loop finding |
+| `docs/evm-gas-reference.md` | You need authoritative SLOAD/MLOAD costs or unchecked arithmetic savings to back a gas estimate |
 
 ## Output Format
 

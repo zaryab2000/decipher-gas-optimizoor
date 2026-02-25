@@ -40,6 +40,42 @@ function calc() external view returns (uint256) {
 }
 ```
 
+## SL-004: Zero out storage slots with `delete` to claim gas refund
+
+Use `delete` on mappings or storage variables when their value is no longer needed,
+triggering the EVM refund for zeroing a slot.
+
+**Gas impact:** ~4,800 gas refund per zeroed slot (EIP-3529), capped at 20% of total tx gas.
+
+```solidity
+// BEFORE: manual zeroing — gas-equivalent but intent is unclear
+function cancelOrder(uint256 orderId) external {
+    require(orderOwner[orderId] == msg.sender);
+    orderOwner[orderId] = address(0);   // SSTORE nonzero→zero: 5,000 gas + 4,800 refund
+    orderAmount[orderId] = 0;           // SSTORE nonzero→zero: 5,000 gas + 4,800 refund
+}
+
+// AFTER: explicit delete — same gas, clearer intent, triggers refund
+function cancelOrder(uint256 orderId) external {
+    require(orderOwner[orderId] == msg.sender);
+    delete orderOwner[orderId];    // SSTORE nonzero→zero: 5,000 gas + 4,800 refund
+    delete orderAmount[orderId];   // SSTORE nonzero→zero: 5,000 gas + 4,800 refund
+    // Net effective cost per slot: ~200 gas after refund (in sufficiently large tx)
+}
+```
+
+**When NOT to apply:**
+- Small transactions where total gas < 24,000: the 20% refund cap prevents full realization.
+- Never `delete` a packed struct field mid-function if sibling fields in the same slot are
+  still in use — `delete` zeroes the entire slot, corrupting co-located variables.
+- Pre-London refund strategies (15,000 gas/slot, 50% cap) no longer apply post-EIP-3529.
+
+**Verification:**
+```bash
+forge test --match-test testCancelOrder -vvvv   # trace SSTORE opcodes and refund
+forge test --gas-report
+```
+
 ## SL-005: Transient storage for reentrancy guard (requires Solidity 0.8.24+, EVM cancun)
 
 ```solidity
@@ -61,6 +97,46 @@ Use when storing > 64 bytes that never changes after deployment.
 Deploy data as contract bytecode; read via `EXTCODECOPY`. Avoids 22,100 gas/slot
 for each 32-byte chunk. Implementation: `SSTORE2.write(data)` returns an address;
 read with `SSTORE2.read(addr)`.
+
+## SL-008: Batch state variable mutations — write storage exactly once per function
+
+Cache a storage variable in a local memory variable, accumulate all mutations locally,
+then write back to storage exactly once at the end of the function.
+
+**Gas impact:** (N−1) × 2,900 gas saved per function, where N is the number of writes to
+the same slot. Each eliminated warm SSTORE (nonzero→nonzero) saves 2,900 gas.
+
+```solidity
+// BEFORE: 3 writes to count — pays 2,900 gas for each intermediate warm SSTORE
+function processThree() external {
+    count += 1;   // SSTORE 1 (cold: 22,100 gas or warm: 2,900 gas)
+    // ... work A ...
+    count += 1;   // SSTORE 2 (warm nonzero→nonzero: 2,900 gas — wasted)
+    // ... work B ...
+    count += 1;   // SSTORE 3 (warm nonzero→nonzero: 2,900 gas — wasted)
+}
+
+// AFTER: 1 SLOAD + all mutations in memory + 1 SSTORE — saves 2 × 2,900 = 5,800 gas
+function processThree() external {
+    uint256 _count = count;   // SLOAD once (2,100 gas cold or 100 gas warm)
+    // ... work A ...
+    // ... work B ...
+    count = _count + 3;       // SSTORE once (22,100 gas cold or 2,900 gas warm)
+}
+```
+
+**When NOT to apply:**
+- If the variable is only written once in the function: no batching benefit.
+- If intermediate state must be observable by re-entrant calls — this is rare and a
+  design smell. Contracts with reentrancy guards can safely batch writes.
+- Naturally combines with SL-003 (cache reads): always cache before mutating.
+- When the variable is inside a loop, see LO-002 for the loop-scoped variant.
+
+**Verification:**
+```bash
+forge test --match-test testProcess -vvvv   # count SSTORE opcodes in trace
+forge snapshot --diff
+```
 
 ## SL-009: Precompute keccak256 as constant
 

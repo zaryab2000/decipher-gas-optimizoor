@@ -147,3 +147,4 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | You need VI-001 gas savings for large array parameters (>10 elements) or the VI-002 inheritance edge case |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all public functions were audited |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-function NFT contract finding |
+| `docs/evm-gas-reference.md` | You need calldata byte costs to quantify savings for array/struct parameters |

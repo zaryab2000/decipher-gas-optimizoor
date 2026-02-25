@@ -211,8 +211,9 @@ struct Position {
 
 ## Anti-Hallucination / Stability Rules
 
-- All gas figures in this skill are derived from `skills/storage-layout.md` (the knowledge
-  base). Do not invent new numbers or cite figures not present in that file.
+- All gas figures in this skill are derived from `docs/evm-gas-reference.md` and
+  `resources/PATTERNS.md`. Do not invent new numbers or cite figures not present in
+  those files.
 - Do not recommend transient storage on chains or compiler versions that do not support
   EIP-1153. Always check §5 Platform Detection first.
 - Do not recommend SSTORE2 for mutable data. Bytecode is immutable.
@@ -233,3 +234,4 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | You encounter an SL pattern (SL-004 through SL-010) not covered by the Quick Reference above, or need to verify an edge case |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and need to confirm completeness |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and need the exact output format for a multi-finding DeFi vault example |
+| `docs/evm-gas-reference.md` | You need authoritative opcode costs (SSTORE, SLOAD, TSTORE) or slot packing rules to back a gas estimate |

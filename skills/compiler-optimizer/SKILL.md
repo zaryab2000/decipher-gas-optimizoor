@@ -74,10 +74,12 @@ All profiles should have `optimizer = true`. Never deploy with optimizer disable
 |---|---|
 | `0.8.22+` | Auto-unchecked simple loop counters (~30 gas/iter saved automatically) |
 | `0.8.24+` | Native `tstore`/`tload` syntax for transient storage (SL-005, SL-006) |
-| `0.8.28` | Latest stable; recommended for all new projects |
+| latest stable | Look up the current release at https://github.com/ethereum/solidity/releases before recommending a specific version — do not assume from memory |
 
-Always pin to an exact version (`pragma solidity 0.8.28;`), not a floating
-range (`^0.8.0`).
+Always pin to an exact version (`pragma solidity X.Y.Z;`), not a floating
+range (`^0.8.0`). When recommending a version upgrade, check the Solidity
+release page for the current stable release and any breaking changes since
+the project's current pragma.
 
 ## Workflow
 
@@ -111,6 +113,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | You need the break-even calculation formula or full multi-profile `foundry.toml` examples beyond what's shown above |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all compiler settings were reviewed |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for an optimizer configuration finding |
+| `docs/evm-gas-reference.md` | You need EIP references or baseline opcode costs to contextualize compiler optimization impact |
 
 ## Output Format
 
@@ -192,14 +195,14 @@ CO-003 | LendingPool.sol:2 | pragma solidity ^0.8.0
     pragma solidity ^0.8.0;
 
   Recommended:
-    pragma solidity 0.8.28;
+    pragma solidity <latest-stable>;   // check https://github.com/ethereum/solidity/releases
 
   Rationale: 0.8.22+ auto-unchecks simple loop counters (no manual
   unchecked{} wrapper needed). 0.8.24+ enables native tstore/tload for
   reentrancy guards (~26,900 gas saved per guarded call vs SSTORE-based
-  guard). 0.8.28 is the current stable release with all incremental
-  optimizer improvements.
+  guard). The latest stable release includes all incremental optimizer
+  improvements — look up the current version before recommending.
 
-  Action: Bump pragma, run forge test for regressions, re-verify
-  deployment artifacts match the new compiler version.
+  Action: Bump pragma to the current stable release, run forge test for
+  regressions, re-verify deployment artifacts match the new compiler version.
 ```
