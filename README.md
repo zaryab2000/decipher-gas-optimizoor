@@ -72,7 +72,7 @@ When a regression is detected:
 ```
 GAS_GUARD: REGRESSION DETECTED
 GAS_GUARD: -----------------------------------------
-  VaultTest:testDeposit() (+1240 gas) (gas: 38400->39640)
+  ↑ VaultTest::testDeposit() (gas: 38400 → 39640 | 1240 3.228%)
 GAS_GUARD: -----------------------------------------
 GAS_GUARD: Threshold: 500 gas | Run /gas:analyze to investigate
 ```

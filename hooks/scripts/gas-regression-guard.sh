@@ -1,4 +1,7 @@
 #!/bin/bash
+# Gas regression guard — PostToolUse hook for src/**/*.sol Write/Edit events.
+# Runs forge snapshot --diff and warns when any test's gas increases above the
+# configured threshold. Always exits 0 — never breaks the Claude Code session.
 set -euo pipefail
 
 THRESHOLD="${GAS_REGRESSION_THRESHOLD:-500}"
@@ -11,20 +14,25 @@ if [ ! -f "$SNAPSHOT_PATH" ]; then
   echo "GAS_GUARD: No baseline at $SNAPSHOT_PATH — run /gas:baseline --update"; exit 0
 fi
 
-DIFF_OUTPUT=$(forge snapshot --diff "$SNAPSHOT_PATH" 2>&1) || {
-  echo "GAS_GUARD: forge snapshot failed (build error or no tests)"; exit 0
-}
+# forge snapshot --diff exits non-zero on build failure; capture output regardless.
+DIFF_OUTPUT=""
+DIFF_OUTPUT=$(forge snapshot --diff "$SNAPSHOT_PATH" 2>&1) || true
 
-# Collect regression lines into an array to avoid printf %b escape issues.
-# forge snapshot --diff marks regressions with "(+N gas)" or "increased" keyword.
-# We match lines containing "(+" followed by digits and "gas)" — ASCII-safe.
+# Regression lines from `forge snapshot --diff` look exactly like:
+#   ↑ CounterTest::testFoo() (gas: 27606 → 49882 | 22276 80.693%)
+# The line starts with the ↑ character (U+2191) and the delta is the integer
+# immediately after "| " before the space+percentage. We match that field.
+# Improvement lines use ↓ and stable lines use ━ — we ignore both.
 REGRESSIONS=()
 while IFS= read -r line; do
-  # Match forge snapshot --diff regression lines: contain "(+<digits>" indicating gas increase
-  if [[ "$line" =~ \(\+([0-9]+) ]]; then
-    GAS_DELTA="${BASH_REMATCH[1]}"
-    if [[ "$GAS_DELTA" -gt "$THRESHOLD" ]]; then
-      REGRESSIONS+=("  ${line}")
+  # Match lines that start with the ↑ regression marker
+  if [[ "$line" == $'\xe2\x86\x91'* ]]; then
+    # Extract delta: the integer after "| " in the line
+    if [[ "$line" =~ \|[[:space:]]([0-9]+)[[:space:]] ]]; then
+      GAS_DELTA="${BASH_REMATCH[1]}"
+      if [[ "$GAS_DELTA" -gt "$THRESHOLD" ]]; then
+        REGRESSIONS+=("  ${line}")
+      fi
     fi
   fi
 done <<< "$DIFF_OUTPUT"
