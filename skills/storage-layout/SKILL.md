@@ -9,12 +9,10 @@ description: >
   through SL-010: slot packing, address+uint96 pairing, storage caching, delete
   refunds, transient reentrancy guards, flash-loan flags, SSTORE2, batch writes,
   keccak constant precomputation, and mapping-vs-array decisions.
-allowed-tools:
-  - Read
-  - Bash
+allowed-tools: Read Bash
 ---
 
-## 1. Purpose
+## Purpose
 
 Identify storage slot inefficiencies in Solidity contracts and recommend layout changes
 that reduce SSTORE and SLOAD costs. Storage operations are the most expensive EVM
@@ -27,7 +25,7 @@ optimization knowledge base. It does not invent new rules.
 
 ---
 
-## 2. When to Use This Skill
+## When to Use This Skill
 
 - Writing or reviewing a `struct` definition with mixed-size fields
 - Reviewing state variable declarations at the contract level
@@ -39,7 +37,7 @@ optimization knowledge base. It does not invent new rules.
 
 ---
 
-## 3. When NOT to Use This Skill
+## When NOT to Use This Skill
 
 - **Upgradeable contracts (proxy pattern):** Never reorder existing state variables.
   Storage layout is immutable across upgrades. Only append at the end, using gaps.
@@ -54,7 +52,7 @@ optimization knowledge base. It does not invent new rules.
 
 ---
 
-## 4. Rationalizations to Reject
+## Rationalizations to Reject
 
 | Rationalization | Why It's Wrong | Required Action |
 |---|---|---|
@@ -65,7 +63,7 @@ optimization knowledge base. It does not invent new rules.
 
 ---
 
-## 5. Platform Detection
+## Platform Detection
 
 Before applying any recommendation, verify the environment:
 
@@ -94,7 +92,7 @@ If either condition is unmet, skip those techniques and note the constraint.
 
 ---
 
-## 6. Quick Reference
+## Quick Reference
 
 ### Variable size table
 
@@ -130,7 +128,7 @@ Is the data written once and read many times (>2 reads)?
 
 ---
 
-## 7. Workflow
+## Workflow
 
 **Step 1 — Identify variables**
 - [ ] List all `struct` definitions and state variable declarations in scope
@@ -160,7 +158,7 @@ Is the data written once and read many times (>2 reads)?
 
 ---
 
-## 8. Output Format
+## Output Format
 
 Report each finding using this structure:
 
@@ -225,7 +223,7 @@ struct Position {
 
 ---
 
-## 9. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
 

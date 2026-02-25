@@ -8,11 +8,10 @@ description: >
   subtraction). Never recommends unchecked without explicit proof of safety.
   Use when reviewing bounded arithmetic or subtraction that follows a bounds check
   in Foundry-based Solidity 0.8+ projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
-## 1. Purpose
+## Purpose
 
 Identify arithmetic operations where the overflow/underflow invariant is provable from
 the surrounding code logic, then wrap those operations in `unchecked {}` to skip
@@ -20,7 +19,7 @@ Solidity 0.8+'s automatic overflow guards (~30 gas per operation). Always requir
 explicit inline comment documenting the invariant. Never recommend `unchecked` without
 proof.
 
-## 2. When to Use This Skill
+## When to Use This Skill
 
 Use when:
 - Claude reviews a subtraction operation that is immediately preceded by a check
@@ -30,7 +29,7 @@ Use when:
   validation (e.g., a `uint8` counter that cannot exceed 255)
 - The user asks whether a specific arithmetic expression is safe to wrap in `unchecked`
 
-## 3. When NOT to Use This Skill
+## When NOT to Use This Skill
 
 Do NOT use for:
 - Any arithmetic where the overflow/underflow condition is not explicitly proven in the
@@ -46,7 +45,7 @@ Do NOT use for:
 - When uncertain about overflow safety: state "Cannot confirm bounds — do not apply
   unchecked without fuzz test proving safety" rather than guessing
 
-## 4. Rationalizations to Reject
+## Rationalizations to Reject
 
 | Rationalization | Why It's Wrong | Required Action |
 |-----------------|----------------|-----------------|
@@ -55,7 +54,7 @@ Do NOT use for:
 | "It's a small number" | Small input does not mean overflow-safe — compound expressions can overflow | Trace the maximum possible value through every arithmetic operation |
 | "The compiler would catch it" | The compiler does not catch logical overflow errors — it only removes the runtime check | Prove the invariant in code and in comments |
 
-## 5. Platform Detection
+## Platform Detection
 
 This skill applies when the following markers are present:
 
@@ -68,7 +67,7 @@ This skill applies when the following markers are present:
 
 Do not apply to Solidity < 0.8.0 (no overflow checks present to remove) or to Vyper.
 
-## 6. Quick Reference
+## Quick Reference
 
 **Decision tree — apply in order for each arithmetic operation:**
 
@@ -93,7 +92,7 @@ Is the operation on values with provable upper/lower bounds from type or constan
 | `a - b` where prior check proves `a >= b` | UA-002 | ~30 gas/subtraction |
 | Arithmetic on values bounded by type/constant | UA-001 | ~30 gas/operation |
 
-## 7. Workflow
+## Workflow
 
 ### Step 1: Identify arithmetic operations
 
@@ -125,7 +124,7 @@ Is the operation on values with provable upper/lower bounds from type or constan
   amount = max, amount = balance)
 - [ ] Run `forge fuzz` to validate no unexpected overflow path exists
 
-## 8. Output Format
+## Output Format
 
 When a safe unchecked opportunity is identified, report using this format:
 
@@ -159,7 +158,7 @@ unreachable dead code. Wrapping in `unchecked {}` removes it.
 subtraction (reentrancy guard present or CEI pattern followed). Add fuzz test:
 `testWithdrawFuzz(uint256 amount)` covering `amount > deposits[caller]`.
 
-## 9. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
 

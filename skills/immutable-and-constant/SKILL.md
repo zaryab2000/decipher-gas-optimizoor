@@ -8,11 +8,10 @@ description: >
   assignments), IC-002 (immutable for constructor-set values), IC-003 (immutable
   for frequently-read address variables). Use when writing constructors or
   reviewing state variable declarations in Foundry-based Solidity projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
-## 1. Purpose
+## Purpose
 
 Identify state variables that are assigned a fixed value and never modified, then
 promote them to `constant` (compile-time-known values) or `immutable`
@@ -21,7 +20,7 @@ values are inlined as bytecode literals (zero runtime read cost); `immutable` va
 are baked into deployed bytecode and read via PUSH opcode (~3 gas vs 2,100 gas cold
 SLOAD).
 
-## 2. When to Use This Skill
+## When to Use This Skill
 
 Use when:
 - Claude is writing state variable declarations at contract scope
@@ -31,7 +30,7 @@ Use when:
   stored as regular `address` or `uint256` state variables but never reassigned
 - A modifier reads a state variable on every call (e.g., `onlyOwner`)
 
-## 3. When NOT to Use This Skill
+## When NOT to Use This Skill
 
 Do NOT use for:
 - Variables that are reassigned in any function after the constructor — those require
@@ -43,7 +42,7 @@ Do NOT use for:
 - Variables that must be updatable (e.g., a transferable owner address) — use regular
   storage with appropriate access control
 
-## 4. Platform Detection
+## Platform Detection
 
 This skill applies when the following markers are present:
 
@@ -56,7 +55,7 @@ This skill applies when the following markers are present:
 
 Do not apply to Vyper (`.vy`) or non-EVM languages.
 
-## 5. Quick Reference
+## Quick Reference
 
 **Decision tree — apply in order for each state variable:**
 
@@ -79,7 +78,7 @@ Value must change after deployment → regular storage (necessary cost)
 | `immutable` | ~3 gas (PUSH32) | No | Constructor only |
 | `constant` | ~0 gas (inlined) | No | Declaration only |
 
-## 6. Workflow
+## Workflow
 
 ### Step 1: Scan all state variable declarations
 
@@ -104,7 +103,7 @@ Value must change after deployment → regular storage (necessary cost)
 - [ ] Scan frequently-called external functions for repeated state variable reads
 - [ ] Prioritize these in the report — they save gas on every single call
 
-## 7. Output Format
+## Output Format
 
 When a gas issue is identified, report using this format:
 
@@ -146,7 +145,7 @@ functions called 200 times per day, declaring `owner` immutable saves
 
 ---
 
-## 8. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load both by default:
 

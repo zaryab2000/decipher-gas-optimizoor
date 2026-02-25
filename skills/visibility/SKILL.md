@@ -7,11 +7,10 @@ description: >
   call for simple types and thousands for arrays. Covers VI-001 (public → external
   when no internal calls) and VI-002 (remove duplicate manual getters). Use when
   writing or reviewing function declarations in Foundry-based Solidity projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
-## 1. Purpose
+## Purpose
 
 Identify functions declared `public` that are never called internally and remove
 manual getter functions that duplicate Solidity's auto-generated getters. Both
@@ -24,7 +23,7 @@ parameters.
 
 ---
 
-## 2. When to Use This Skill
+## When to Use This Skill
 
 - Writing or reviewing any Solidity function declaration
 - Code review of contracts with many `public` functions
@@ -34,7 +33,7 @@ parameters.
 
 ---
 
-## 3. When NOT to Use This Skill
+## When NOT to Use This Skill
 
 - Functions already declared `external` — already optimal
 - Contracts with no `public` functions
@@ -44,7 +43,7 @@ parameters.
 
 ---
 
-## 4. Platform Detection
+## Platform Detection
 
 Trigger on any `.sol` file containing `public` function declarations or manual
 `view` getter functions. No tooling prerequisites beyond `Read`.
@@ -59,7 +58,7 @@ grep -n "view returns" src/**/*.sol
 
 ---
 
-## 5. Quick Reference
+## Quick Reference
 
 | Situation | Action |
 |---|---|
@@ -72,7 +71,7 @@ grep -n "view returns" src/**/*.sol
 
 ---
 
-## 6. Workflow
+## Workflow
 
 **Step 1 — Find all `public` functions**
 - [ ] Read the contract and list every function with `public` visibility
@@ -94,7 +93,7 @@ grep -n "view returns" src/**/*.sol
 
 ---
 
-## 7. Output Format
+## Output Format
 
 Report each finding using this structure:
 
@@ -138,7 +137,7 @@ function batchTransfer(uint256[] calldata ids, address to) external {
 
 ---
 
-## 8. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
 

@@ -8,24 +8,23 @@ description: >
   EV-002 (indexed parameter selection for filterable events). Use when writing
   storage arrays for historical records or event declarations in Foundry-based
   Solidity projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
-## 1. Purpose
+## Purpose
 
 Identify storage arrays used solely for off-chain historical data and replace
 the writes with event emission. Also audit event declarations for missing
 `indexed` parameters on fields that callers will filter by.
 
-## 2. When to Use
+## When to Use
 
 - Writing or reviewing functions that push to storage arrays
 - Adding new events to a contract
 - Pre-audit review of data retention patterns
 - Reviewing any contract that stores audit trails, price history, or action logs
 
-## 3. When NOT to Use
+## When NOT to Use
 
 - When storage data must be read by on-chain code (another contract or the
   same contract reads the array on-chain)
@@ -33,7 +32,7 @@ the writes with event emission. Also audit event declarations for missing
   accessible via `eth_getStorageAt` without indexer infrastructure
 - When reviewing contracts with no storage arrays and no events
 
-## 4. Rationalizations to Reject
+## Rationalizations to Reject
 
 | Rationalization | Why It's Wrong | Required Action |
 |---|---|---|
@@ -42,12 +41,12 @@ the writes with event emission. Also audit event declarations for missing
 | "It's just one array" | One array pushed once per user action at 1,000 users/day = 22,100,000 gas/day wasted | Estimate the volume, not the per-instance cost |
 | "Removing storage might break existing callers" | Before removing, verify no external contract reads the array via `eth_getStorageAt` or ABI calls; confirm off-chain-only access | Audit callers, don't assume |
 
-## 5. Platform Detection
+## Platform Detection
 
 Trigger on any `.sol` file containing storage array `push()` calls or `event`
 declarations without `indexed` parameters on address/uint256/bytes32 fields.
 
-## 6. Quick Reference
+## Quick Reference
 
 | Data type | On-chain access needed? | Recommendation |
 |---|---|---|
@@ -57,7 +56,7 @@ declarations without `indexed` parameters on address/uint256/bytes32 fields.
 | More than 3 filterable fields | — | Index the 3 most important |
 | `string`/`bytes` event field | — | Do NOT index (hashes value, loses original) |
 
-## 7. Workflow
+## Workflow
 
 1. **Find storage arrays written but never read on-chain.**
    Search the contract for `storageArray.push(...)` calls. For each array,
@@ -82,7 +81,7 @@ declarations without `indexed` parameters on address/uint256/bytes32 fields.
    original value unrecoverable from the topic). Do not index fields that are
    never used as filter criteria in off-chain queries.
 
-## 8. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
 
@@ -93,7 +92,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a history-array finding |
 | `docs/evm-gas-reference.md` | You need LOG opcode costs or the SSTORE vs event gas comparison table |
 
-## 9. Output Format
+## Output Format
 
 Report each finding with: pattern ID, storage variable or event name, file and
 line reference, gas estimate, and the exact change required.

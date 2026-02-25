@@ -8,9 +8,7 @@ description: >
   CO-002 (via_ir for Yul-level optimization), CO-003 (Solidity version selection
   for 0.8.22 auto-unchecked loops and 0.8.24 transient storage). Use when writing
   or reviewing foundry.toml or pragma declarations.
-allowed-tools:
-  - Read
-  - Bash
+allowed-tools: Read Bash
 ---
 
 ## Purpose

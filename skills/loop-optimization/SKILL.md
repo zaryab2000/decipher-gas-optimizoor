@@ -8,9 +8,7 @@ description: >
   Foundry-based Solidity projects. Covers LO-001 through LO-006: length caching,
   body storage caching, unchecked counters, pre-increment, do-while patterns,
   and boolean short-circuit evaluation.
-allowed-tools:
-  - Read
-  - Bash
+allowed-tools: Read Bash
 ---
 
 ## Purpose

@@ -7,17 +7,16 @@ description: >
   error), CE-002 (revert string → custom error), CE-003 (parameterless errors that
   should include typed context). Use when writing or reviewing any revert logic in
   Foundry-based Solidity 0.8.4+ projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
-## 1. Purpose
+## Purpose
 
 Convert every string-based revert in a Solidity contract to a custom error. Custom
 errors (introduced in Solidity 0.8.4) use a 4-byte selector instead of a string,
 reducing bytecode size and runtime revert cost by ~15–50 gas per revert path.
 
-## 2. When to Use This Skill
+## When to Use This Skill
 
 Use when:
 - Claude is writing any `require(condition, "string")` statement
@@ -28,7 +27,7 @@ Use when:
 
 Fire on **every** `require(cond, "string")` or `revert("string")` without exception.
 
-## 3. When NOT to Use This Skill
+## When NOT to Use This Skill
 
 Do NOT use for:
 - `require(condition)` with no message — no string to remove, nothing to convert
@@ -37,7 +36,7 @@ Do NOT use for:
 - Third-party library code you do not control (flag but do not modify)
 - String-based reverts in test files where human-readable messages aid test output
 
-## 4. Platform Detection
+## Platform Detection
 
 This skill applies when the following markers are present:
 
@@ -50,7 +49,7 @@ This skill applies when the following markers are present:
 
 Do not apply to Vyper (`.vy`) or non-EVM languages.
 
-## 5. Quick Reference
+## Quick Reference
 
 | Pattern | Fix | Gas Saving |
 |---------|-----|------------|
@@ -61,7 +60,7 @@ Do not apply to Vyper (`.vy`) or non-EVM languages.
 **Decision rule:** If a quote mark appears inside a `require()` or `revert()`, this
 skill fires. No exceptions.
 
-## 6. Workflow
+## Workflow
 
 ### Step 1: Scan for require(cond, "string") — CE-001
 
@@ -86,7 +85,7 @@ skill fires. No exceptions.
 - [ ] Update the revert site to pass the values
 - [ ] Skip if no useful context exists (e.g., `NotOwner()` — address is implicit in `msg.sender`)
 
-## 7. Output Format
+## Output Format
 
 When a gas issue is identified, report using this format:
 
@@ -114,7 +113,7 @@ encodes only its 4-byte selector. The string is also stored in contract bytecode
 
 ---
 
-## 8. Supporting Docs
+## Supporting Docs
 
 Only read these files when explicitly needed — do not load both by default:
 

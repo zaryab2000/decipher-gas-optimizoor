@@ -8,8 +8,7 @@ description: >
   in Foundry-based Solidity projects. Covers CD-001 through CD-004: calldata
   arrays, calldata structs, uint256 for computation parameters, and bool bitmap
   encoding.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
 ## Purpose

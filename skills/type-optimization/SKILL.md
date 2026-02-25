@@ -8,8 +8,7 @@ description: >
   type downcasts in hot paths. Covers TY-001 through TY-004. Use when writing
   variable declarations or reviewing arithmetic-heavy functions in Foundry-based
   Solidity projects.
-allowed-tools:
-  - Read
+allowed-tools: Read
 ---
 
 ## Purpose
