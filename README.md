@@ -29,40 +29,10 @@
 
 ## Installation
 
-### Option 1 — Claude Code Marketplace (recommended)
-
-Open Claude Code and run:
-
 ```
-/plugins
-```
-
-Search for **decipher-gas-optimizoor** and click **Install**. The plugin is active immediately in any project you open.
-
-### Option 2 — Direct install via URL
-
-Paste this into any Claude Code session:
-
-```
-/plugin install https://github.com/zaryab2000/decipher-gas-optimizoor
-```
-
-### Option 3 — Pin it to a project via `settings.json`
-
-Add the plugin to `.claude/settings.json` in your project root. Every developer who opens the project in Claude Code gets the plugin automatically:
-
-```json
-{
-  "plugins": [
-    {
-      "name": "decipher-gas-optimizoor",
-      "source": "https://github.com/zaryab2000/decipher-gas-optimizoor"
-    }
-  ]
-}
-```
-
-Commit this file so it travels with your repo.
+/plugin marketplace add zaryab2000/decipher-gas-optimizoor
+/plugin install decipher-gas-optimizoor@decipher-gas-optimizoor-marketplace
+````
 
 ---
 
