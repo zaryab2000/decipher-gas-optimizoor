@@ -34,13 +34,17 @@ Use when:
 
 Do NOT use for:
 - Any arithmetic where the overflow/underflow condition is not explicitly proven in the
-  same function scope — "it looks safe" is not proof
+  same function scope — "it looks safe" is not proof; document the invariant in a comment
+  or do not apply
 - User-controlled inputs that have not been validated by a prior bounds check
 - Business-critical arithmetic (token balances, prices, collateral ratios) unless fuzz
-  test coverage specifically targeting boundary values is confirmed to exist
+  test coverage specifically targeting boundary values is confirmed to exist — always
+  document the fuzz test name in the finding
 - Operations inside re-entrant paths where state can change between the check and the
-  arithmetic (check re-entrancy guards before applying)
+  arithmetic (confirm reentrancy guard present or CEI pattern followed before applying)
 - Solidity versions before 0.8.0 — those have no overflow checks to remove
+- When uncertain about overflow safety: state "Cannot confirm bounds — do not apply
+  unchecked without fuzz test proving safety" rather than guessing
 
 ## 4. Rationalizations to Reject
 
@@ -155,21 +159,6 @@ unreachable dead code. Wrapping in `unchecked {}` removes it.
 subtraction (reentrancy guard present or CEI pattern followed). Add fuzz test:
 `testWithdrawFuzz(uint256 amount)` covering `amount > deposits[caller]`.
 
----
-
-## Stability Rules
-
-- Never recommend `unchecked` unless the no-overflow condition is stated explicitly in
-  comments OR is provable from bounds in the same function scope
-- For user-controlled inputs: require bounds validation (`require`/`if`+revert) before
-  any `unchecked` block
-- Always require fuzz test coverage for any `unchecked` block — document the test name
-  in the finding
-- Do not apply `unchecked` to business-critical arithmetic (balances, prices) without
-  explicit confirmation that fuzz tests exist
-- When uncertain about overflow safety: state "Cannot confirm bounds — do not apply
-  unchecked without fuzz test proving safety" rather than guessing
-
 ## 9. Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
@@ -179,3 +168,4 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | You need a UA-001 edge case (multiplication overflow proof, compound expression bounds) not covered by the Quick Reference |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming safety checks are complete |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for an unchecked finding |
+| `docs/evm-gas-reference.md` | You need the arithmetic opcode cost table (checked vs unchecked ADD/SUB/MUL) to back a gas estimate |

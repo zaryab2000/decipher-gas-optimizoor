@@ -1,5 +1,5 @@
 {
-  "name": "decipher-gas-optimizoor-marketplace",
+  "name": "decipher-gas-optimizoor",
   "version": "1.0.0",
   "metadata": {
     "description": "Gas optimization plugins for Foundry-based Solidity projects — automated regression detection, 11 optimization skill domains, and 5 analysis commands."

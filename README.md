@@ -65,15 +65,15 @@ The regression guard runs automatically after every Write or Edit on `src/**/*.s
 
 When no regression is detected:
 ```
-GAS_GUARD: ✅ No regressions above 500 gas
+GAS_GUARD: No regressions above 500 gas
 ```
 
 When a regression is detected:
 ```
-GAS_GUARD: ⛽ REGRESSION DETECTED
-GAS_GUARD: ─────────────────────────────────────────
-  VaultTest:testDeposit() (gas: +1,240)
-GAS_GUARD: ─────────────────────────────────────────
+GAS_GUARD: REGRESSION DETECTED
+GAS_GUARD: -----------------------------------------
+  VaultTest:testDeposit() (+1240 gas) (gas: 38400->39640)
+GAS_GUARD: -----------------------------------------
 GAS_GUARD: Threshold: 500 gas | Run /gas:analyze to investigate
 ```
 

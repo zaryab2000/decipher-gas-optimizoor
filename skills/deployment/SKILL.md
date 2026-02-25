@@ -13,7 +13,7 @@ allowed-tools:
   - Bash
 ---
 
-## Purpose
+## 1. Purpose
 
 Identify deployment cost inefficiencies: factory patterns deploying full
 contracts instead of minimal proxies, dead code inflating bytecode, and
@@ -21,7 +21,7 @@ configuration-level savings (payable admin functions, vanity addresses for
 ultra-high-frequency protocols). Deployment cost is 200 gas/byte of bytecode
 and is paid once per instance — reducing it compounds at factory scale.
 
-## When to Use
+## 2. When to Use
 
 - Writing or reviewing factory contracts
 - Reviewing constructors and `new ContractName()` patterns
@@ -29,19 +29,28 @@ and is paid once per instance — reducing it compounds at factory scale.
 - Reviewing contracts with known dead or conditional code paths
 - Reviewing admin functions in high-frequency DeFi protocols
 
-## When NOT to Use
+## 3. When NOT to Use
 
 - Contracts that are already using proxies (ERC-1967, UUPS, Beacon)
 - Singleton contracts deployed once with no factory pattern
 - When dead code was intentionally preserved for a future activation
 
-## Platform Detection
+## 4. Rationalizations to Reject
+
+| Rationalization | Why It's Wrong | Required Action |
+|---|---|---|
+| "It's only one deployment" | Factory contracts deploy potentially thousands of instances; 491,000 gas × 1,000 users = 491M gas wasted | Estimate scale before dismissing |
+| "The optimizer removes dead code" | The optimizer eliminates some dead paths but not all — unused internal functions and `if(false)` branches often survive | Always measure with `forge build --sizes` before and after |
+| "payable is risky" | The risk is locked ETH if no withdrawal exists — document the precondition, don't skip the optimization | Apply with the ETH-recovery check, not instead of it |
+| "We can refactor after launch" | Deployment cost is paid at deploy time; you cannot retroactively reduce it for already-deployed instances | Fix the factory pattern before any significant user adoption |
+
+## 5. Platform Detection
 
 Trigger fires when:
 - A factory function uses `new ContractName()` to deploy multiple instances
 - `Bash` is available to run `forge build --sizes` for bytecode measurement
 
-## Quick Reference
+## 6. Quick Reference
 
 - Factory deploying `new ContractName()` for each user? → ERC-1167 minimal
   proxy (DP-001, ~491,000 gas saved per clone)
@@ -52,7 +61,7 @@ Trigger fires when:
 - CREATE2 factory for ultra-high-frequency protocol (millions of calls/day)?
   → consider vanity address (DP-004, ~12 gas/call/leading-zero-byte)
 
-## Workflow
+## 7. Workflow
 
 1. **Find factory patterns — does it use `new ContractName()`?**
    Search the contract for `new ` keywords. For each `new` deployment, ask:
@@ -81,7 +90,7 @@ Trigger fires when:
    Note: adding `payable` to a function in a contract with no ETH withdrawal
    mechanism risks permanently locking any accidentally sent ETH.
 
-## Output Format
+## 8. Output Format
 
 Report each finding with: pattern ID, contract/function, file and line
 reference, gas estimate, and the exact change required.
@@ -152,7 +161,7 @@ DP-003 | TokenSale.sol:14 | dead _applyPresaleDiscount() branch
     forge build --sizes   # bytecode size before vs after
 ```
 
-## Supporting Docs
+## 9. Supporting Docs
 
 Only read these files when explicitly needed — do not load all three by default:
 
@@ -161,6 +170,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | `resources/PATTERNS.md` | You need DP-004 (vanity address via CREATE2) details or full ERC-1167 clone implementation not shown above |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all deployment patterns were checked |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a factory optimization finding |
+| `docs/evm-gas-reference.md` | You need authoritative opcode costs (SSTORE, CREATE, DELEGATECALL) to back a gas estimate |
 
 **Example finding (DP-002):**
 
