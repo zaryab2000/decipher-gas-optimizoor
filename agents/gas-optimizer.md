@@ -1,6 +1,17 @@
-# Agent: gas-optimizer
-# Role: Deep Gas Optimization Session Agent
-# Invocation: /agent:gas-optimizer
+---
+name: gas-optimizer
+description: >
+  Deep gas optimization audit agent for Foundry-based Solidity codebases. Runs a
+  comprehensive multi-file analysis covering all 11 skill domains (storage layout,
+  loops, calldata, deployment, type optimization, custom errors, compiler optimizer,
+  immutable/constant, unchecked arithmetic, visibility, event logging). Use before
+  mainnet deployment, pre-audit optimization passes, or when auditing an inherited
+  codebase. Produces a prioritized findings report with concrete code changes sorted
+  by gas impact.
+allowed-tools:
+  - Read
+  - Bash
+---
 
 ## Purpose
 Conducts a comprehensive, multi-file gas optimization audit of a Foundry-based

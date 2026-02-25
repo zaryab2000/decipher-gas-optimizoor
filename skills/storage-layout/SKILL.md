@@ -211,8 +211,9 @@ struct Position {
 
 ## Anti-Hallucination / Stability Rules
 
-- All gas figures in this skill are derived from `skills/storage-layout.md` (the knowledge
-  base). Do not invent new numbers or cite figures not present in that file.
+- All gas figures in this skill are derived from `docs/evm-gas-reference.md` and
+  `resources/PATTERNS.md`. Do not invent new numbers or cite figures not present in
+  those files.
 - Do not recommend transient storage on chains or compiler versions that do not support
   EIP-1153. Always check §5 Platform Detection first.
 - Do not recommend SSTORE2 for mutable data. Bytecode is immutable.

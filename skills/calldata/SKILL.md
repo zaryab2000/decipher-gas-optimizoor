@@ -103,7 +103,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 
 | File | Read only when… |
 |---|---|
-| `resources/PATTERNS.md` | You need CD-003 bitmap encoding details or a CD-004 edge case not in the Quick Reference |
+| `resources/PATTERNS.md` | You need CD-004 bitmap encoding details or a CD-003/CD-004 edge case not in the Quick Reference |
 | `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-param struct/array finding |
 
