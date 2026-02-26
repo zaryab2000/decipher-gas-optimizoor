@@ -33,16 +33,16 @@ docs/                    # configuration.md, evm-gas-reference.md
 
 ## Skill File Structure
 
-Every `skills/*/SKILL.md` must follow this exact 9-section structure:
-1. YAML frontmatter — name, description, allowed-tools
-2. Purpose
-3. When to Use
-4. When NOT to Use
-5. Rationalizations to Reject (high-stakes skills only)
-6. Platform Detection
-7. Quick Reference — decision table or tree
-8. Workflow — numbered steps with checkboxes
-9. Output Format — with a filled-in concrete example finding
+Every `skills/*/SKILL.md` must follow this exact 9-section structure (unnumbered headings):
+- YAML frontmatter — `name`, `description`, `allowed-tools` (space-delimited string, e.g. `allowed-tools: Read Bash`)
+- `## Purpose`
+- `## When to Use`
+- `## When NOT to Use`
+- `## Rationalizations to Reject` (high-stakes skills only)
+- `## Platform Detection`
+- `## Quick Reference` — decision table or tree
+- `## Workflow` — numbered steps with checkboxes
+- `## Output Format` — with a filled-in concrete example finding
 
 Supporting files per domain: `resources/PATTERNS.md`, `resources/CHECKLIST.md`, `resources/EXAMPLE_FINDING.md`.
 

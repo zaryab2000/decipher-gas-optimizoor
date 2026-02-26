@@ -122,45 +122,15 @@ Estimated: -20 gas per revert; -~40,000 gas at deployment.
 
 Turn it off with `/gas:watch --off`.
 
-### 4. Learn any pattern on demand
-
-```
-/gas:explain cold-sload
-```
-
-```
-## cold-sload
-
-**What it is:** A cold SLOAD is the first read of a storage slot within a
-transaction — costs 2,100 gas (EIP-2929). Subsequent reads of the same slot
-cost 100 gas. Reading from memory (MLOAD) costs 3 gas.
-
-**Gas cost difference:**
-| Operation          | Cost      |
-| cold SLOAD         | 2,100 gas |
-| warm SLOAD         | 100 gas   |
-| MLOAD (cached)     | 3 gas     |
-
-Caching to a local variable converts every access after the first from 100 → 3
-gas, saving 97 gas per avoided warm SLOAD.
-
-**Before / after:** [with Solidity examples]
-
-**When NOT to apply:** If a re-entrant call between reads could change the value,
-caching produces a stale view.
-```
-
----
-
 ## Commands
 
-| Command | What it does | Forge |
-| ------- | ------------ | :---: |
-| `/gas:analyze [path] [--threshold N]` | Full analysis of a contract or directory. Builds, snapshots, inspects storage layouts, and reports all findings sorted by gas saving. | ✅ |
-| `/gas:compare [ref1] [ref2]` | Compares gas snapshots between two git refs (default: `HEAD~1` vs `HEAD`). Shows per-function delta and percent change, split into regressions and improvements. | ✅ |
-| `/gas:baseline [--update\|--show X]` | Manages the `.gas-snapshot` baseline. `--update` regenerates it; `--show X` filters to matching functions; no args prints the full summary table. | `--update` only |
-| `/gas:explain <pattern>` | EVM mechanic, exact gas numbers, before/after code, and when NOT to apply for any listed pattern. | ❌ |
-| `/gas:watch [--off]` | Toggles per-edit gas annotation mode. While active, Claude appends a gas impact note after every Solidity edit. Session-scoped. | ❌ |
+| Command                               | What it does                                                                                                                                                     |      Forge      |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
+| `/gas:analyze [path] [--threshold N]` | Full analysis of a contract or directory. Builds, snapshots, inspects storage layouts, and reports all findings sorted by gas saving.                            |        ✅        |
+| `/gas:compare [ref1] [ref2]`          | Compares gas snapshots between two git refs (default: `HEAD~1` vs `HEAD`). Shows per-function delta and percent change, split into regressions and improvements. |        ✅        |
+| `/gas:baseline [--update\|--show X]`  | Manages the `.gas-snapshot` baseline. `--update` regenerates it; `--show X` filters to matching functions; no args prints the full summary table.                | `--update` only |
+| `/gas:explain <pattern>`              | EVM mechanic, exact gas numbers, before/after code, and when NOT to apply for any listed pattern.                                                                |        ❌        |
+| `/gas:watch [--off]`                  | Toggles per-edit gas annotation mode. While active, Claude appends a gas impact note after every Solidity edit. Session-scoped.                                  |        ❌        |
 
 ### `--threshold` option for `/gas:analyze`
 
@@ -182,19 +152,19 @@ Default threshold is 100 gas — findings below this are suppressed unless overr
 
 Skills activate automatically when relevant code patterns appear in the context. You never invoke them directly — they fire as Claude writes or reviews Solidity. Each covers a specific optimization domain and includes a full pattern catalog, checklist, and worked example.
 
-| Skill | Code | Catches | Fires when |
-| ----- | :--: | ------- | ---------- |
-| `storage-layout` | SL | Unpacked structs, wasted slots, suboptimal field ordering, redundant SLOADs, expensive reentrancy guards | Writing `struct` definitions or state variable declarations |
-| `loop-optimization` | LO | Storage reads inside loops, uncached array lengths, missing unchecked counters, suboptimal loop patterns | Writing `for`/`while` loops |
-| `calldata` | CD | `memory` params on `external` functions that should be `calldata`, calldata encoding waste | Writing external function parameters |
-| `deployment` | DP | Suboptimal `optimizer_runs`, proxy pattern opportunities, payable admin savings, bytecode size | Writing constructors, factories, or `foundry.toml` |
-| `type-optimization` | TY | Unnecessary downcasting overhead, `string` where `bytes32` fits, bool bitmap opportunities | Writing variable declarations and type usage |
-| `custom-errors` | CE | Every `require(cond, "string")` and `revert("string")` without exception | Writing any `require` with a string message |
-| `compiler-optimizer` | CO | `optimizer_runs` not tuned for usage, missing `via_ir`, outdated Solidity version | Writing or reviewing `foundry.toml` |
-| `immutable-and-constant` | IC | Constructor-set state variables that should be `immutable`; runtime `keccak256` of a literal | Writing constructor-set state variables |
-| `unchecked-arithmetic` | UA | Arithmetic in bounded loops where overflow is provably impossible | Writing arithmetic in loops |
-| `visibility` | VI | `public` functions only called externally; duplicate public getters | Writing function declarations |
-| `event-logging` | EV | Storage used for historical data that should be events; wrong indexed parameter choices | Writing storage-backed history or audit arrays |
+| Skill                    | Code  | Catches                                                                                                  | Fires when                                                  |
+| ------------------------ | :---: | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `storage-layout`         |  SL   | Unpacked structs, wasted slots, suboptimal field ordering, redundant SLOADs, expensive reentrancy guards | Writing `struct` definitions or state variable declarations |
+| `loop-optimization`      |  LO   | Storage reads inside loops, uncached array lengths, missing unchecked counters, suboptimal loop patterns | Writing `for`/`while` loops                                 |
+| `calldata`               |  CD   | `memory` params on `external` functions that should be `calldata`, calldata encoding waste               | Writing external function parameters                        |
+| `deployment`             |  DP   | Suboptimal `optimizer_runs`, proxy pattern opportunities, payable admin savings, bytecode size           | Writing constructors, factories, or `foundry.toml`          |
+| `type-optimization`      |  TY   | Unnecessary downcasting overhead, `string` where `bytes32` fits, bool bitmap opportunities               | Writing variable declarations and type usage                |
+| `custom-errors`          |  CE   | Every `require(cond, "string")` and `revert("string")` without exception                                 | Writing any `require` with a string message                 |
+| `compiler-optimizer`     |  CO   | `optimizer_runs` not tuned for usage, missing `via_ir`, outdated Solidity version                        | Writing or reviewing `foundry.toml`                         |
+| `immutable-and-constant` |  IC   | Constructor-set state variables that should be `immutable`; runtime `keccak256` of a literal             | Writing constructor-set state variables                     |
+| `unchecked-arithmetic`   |  UA   | Arithmetic in bounded loops where overflow is provably impossible                                        | Writing arithmetic in loops                                 |
+| `visibility`             |  VI   | `public` functions only called externally; duplicate public getters                                      | Writing function declarations                               |
+| `event-logging`          |  EV   | Storage used for historical data that should be events; wrong indexed parameter choices                  | Writing storage-backed history or audit arrays              |
 
 Each skill lives in `skills/<domain>/` with supporting files:
 
@@ -267,12 +237,12 @@ All configuration is through environment variables. Full reference at [`docs/con
 
 Controls when the regression guard emits a warning. Default: `500`.
 
-| Scenario | Recommended value |
-| -------- | ----------------- |
-| Production DeFi — every unit counts | `100`–`200` |
-| Standard contracts with stable tests | `500` (default) |
-| Active refactoring with noisy tests | `1000`–`2000` |
-| Early development | `2000`+ |
+| Scenario                             | Recommended value |
+| ------------------------------------ | ----------------- |
+| Production DeFi — every unit counts  | `100`–`200`       |
+| Standard contracts with stable tests | `500` (default)   |
+| Active refactoring with noisy tests  | `1000`–`2000`     |
+| Early development                    | `2000`+           |
 
 ```bash
 export GAS_REGRESSION_THRESHOLD=200
@@ -321,10 +291,10 @@ FOUNDRY_PROFILE=production forge build
 
 Most of the 44 patterns in this plugin work on any EVM chain. A small subset require Cancun EVM support.
 
-| Pattern group | Requires | Notes |
-| ------------- | -------- | ----- |
+| Pattern group                      | Requires                        | Notes                                                |
+| ---------------------------------- | ------------------------------- | ---------------------------------------------------- |
 | Transient storage (SL-005, SL-006) | Cancun EVM + Solidity `^0.8.24` | Check your chain's Cancun activation before applying |
-| All other patterns (42 of 44) | Any EVM version | Safe on pre-Cancun chains |
+| All other patterns (42 of 44)      | Any EVM version                 | Safe on pre-Cancun chains                            |
 
 The `storage-layout` skill checks your `evm_version` in `foundry.toml` and Solidity pragma before recommending transient storage. On unsupported chains it skips those techniques and notes the constraint.
 
@@ -334,18 +304,6 @@ grep "evm_version" foundry.toml
 ```
 
 **Tested on:** Ethereum mainnet · Arbitrum One · Optimism · Base · Polygon PoS
-
----
-
-## Known Limitations
-
-- **No Yul / inline assembly analysis.** Patterns inside `assembly {}` blocks are not inspected by any skill.
-- **No proxy storage collision verification.** The storage-layout skill warns against reordering in upgradeable contracts but does not verify slot layouts across implementation versions.
-- **Static analysis for most findings.** Skills and `/gas:analyze` report patterns from code structure. Only the regression hook and `/gas:compare` use measured forge output.
-- **`/gas:watch` is session-scoped.** Does not persist across Claude Code restarts. Produces estimates, not measured values — run `/gas:compare` for measurement.
-- **Hook scope is `src/**/*.sol` only.** Contracts in `lib/`, `test/`, and `script/` are not monitored by the regression guard.
-- **No Hardhat Gas Reporter integration.** The regression hook requires `forge snapshot`. Skills and explain/watch work on any Solidity project without forge.
-- **`/gas:explain` covers 9 common patterns.** The plugin tracks 44 patterns across 11 domains; the explain command exposes 9 of them. For the full pattern catalog, browse `skills/<domain>/resources/PATTERNS.md`.
 
 ---
 
