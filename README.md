@@ -130,6 +130,16 @@ Always exits 0 — never interrupts your session. Silently skips if forge is mis
 
 ## Contributing
 
-Every new pattern must include an exact gas number with an EVM opcode reference or EIP citation, a before/after code example in ≤20 lines, and a concrete "When NOT to apply" condition.
+**Found a wrong gas figure or missing EIP citation?**
+Open an issue with the pattern ID (e.g. `SL-003`), the incorrect value, and a source (EIP number or opcode reference).
+
+**Want to add a new optimization pattern to an existing skill?** Every pattern needs:
+1. An exact gas number backed by an EVM opcode reference or EIP citation
+2. A before/after Solidity example in ≤20 lines
+3. A "When NOT to apply" condition — patterns without safety guardrails won't be merged
+
+**Want to add a new skill domain?** Open an issue first to discuss scope. New domains must cover ≥3 distinct patterns and must not overlap with an existing skill.
+
+**Found a bug in the regression hook?** The script is 42 lines at [`hooks/scripts/gas-regression-guard.sh`](hooks/scripts/gas-regression-guard.sh) — read it in full before filing.
 
 [Open an issue →](https://github.com/zaryab2000/decipher-gas-optimizoor/issues)
