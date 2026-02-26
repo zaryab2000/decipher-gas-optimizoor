@@ -152,6 +152,6 @@ Only read these files when explicitly needed — do not load both by default:
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need IC-003 hot-path examples or edge cases (e.g., immutable in library vs contract) not in the Quick Reference |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming completeness |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming completeness |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for a multi-variable vault finding |
 | `docs/evm-gas-reference.md` | You need SLOAD cold/warm costs vs PUSH opcode cost to quantify immutable savings |

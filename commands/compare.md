@@ -1,4 +1,4 @@
-# /gas:compare [ref1] [ref2]
+# /decipher-gas-optimizoor:compare [ref1] [ref2]
 
 Compare gas snapshots between two git references to identify regressions and improvements.
 

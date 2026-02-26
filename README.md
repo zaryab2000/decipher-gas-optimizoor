@@ -21,7 +21,6 @@
 - [Regression Hook](#regression-hook)
 - [Configuration](#configuration)
 - [Chain Compatibility](#chain-compatibility)
-- [Known Limitations](#known-limitations)
 - [Requirements](#requirements)
 - [Contributing](#contributing)
 
@@ -29,8 +28,15 @@
 
 ## Installation
 
+1. Add the marketplace
+
 ```
 /plugin marketplace add zaryab2000/decipher-gas-optimizoor
+```
+
+
+2. Install the Plugin
+```
 /plugin install decipher-gas-optimizoor@decipher-gas-optimizoor-marketplace
 ````
 
@@ -45,15 +51,10 @@ From zero to your first gas analysis in under 3 minutes.
 Run this once in your Foundry project (requires at least one test):
 
 ```
-/gas:baseline --update
+/decipher-gas-optimizoor:baseline --update
 ```
 
-```
-Gas baseline updated: 47 functions recorded in .gas-snapshot
 
-Commit the baseline to version control:
-  git add .gas-snapshot && git commit -m "chore: gas baseline"
-```
 
 Then commit the snapshot file:
 
@@ -63,10 +64,38 @@ git add .gas-snapshot && git commit -m "chore: gas baseline"
 
 > **Important:** Do NOT add `.gas-snapshot` to your `.gitignore`. It must be committed for the regression guard to work.
 
+
+## Commands
+
+| Command                                                   | What it does                                                                                                                                                     |      Forge      |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
+| `/decipher-gas-optimizoor:analyze [path] [--threshold N]` | Full analysis of a contract or directory. Builds, snapshots, inspects storage layouts, and reports all findings sorted by gas saving.                            |        ✅        |
+| `/decipher-gas-optimizoor:compare [ref1] [ref2]`          | Compares gas snapshots between two git refs (default: `HEAD~1` vs `HEAD`). Shows per-function delta and percent change, split into regressions and improvements. |        ✅        |
+| `/decipher-gas-optimizoor:baseline [--update\|--show X]`  | Manages the `.gas-snapshot` baseline. `--update` regenerates it; `--show X` filters to matching functions; no args prints the full summary table.                | `--update` only |
+| `/decipher-gas-optimizoor:explain <pattern>`              | EVM mechanic, exact gas numbers, before/after code, and when NOT to apply for any listed pattern.                                                                |        ❌        |
+| `/decipher-gas-optimizoor:watch [--off]`                  | Toggles per-edit gas annotation mode. While active, Claude appends a gas impact note after every Solidity edit. Session-scoped.                                  |        ❌        |
+
+### `--threshold` option for `/decipher-gas-optimizoor:analyze`
+
+Suppress findings below a minimum estimated gas saving. Useful on large codebases to focus on high-impact issues only:
+
+```
+/decipher-gas-optimizoor:analyze src/ --threshold 500
+```
+
+Default threshold is 100 gas — findings below this are suppressed unless overridden.
+
+### Accepted patterns for `/decipher-gas-optimizoor:explain`
+
+`cold-sload` · `slot-packing` · `unchecked` · `custom-errors` · `calldata` · `external-vs-public` · `immutable` · `loop-caching` · `unbounded-loop`
+
+---
+
+
 ### 2. Run your first analysis
 
 ```
-/gas:analyze src/Vault.sol
+/decipher-gas-optimizoor:analyze src/Vault.sol
 ```
 
 ```markdown
@@ -108,7 +137,7 @@ Reordering eliminates 2 cold SSTOREs (44,200 gas) on first write.
 ### 3. Enable real-time gas annotations while editing
 
 ```
-/gas:watch
+/decipher-gas-optimizoor:watch
 ```
 
 After activation, every Solidity edit Claude makes gets an annotation at the end of the response:
@@ -120,33 +149,7 @@ NotOwner() — eliminates ABI-encoded string revert data.
 Estimated: -20 gas per revert; -~40,000 gas at deployment.
 ```
 
-Turn it off with `/gas:watch --off`.
-
-## Commands
-
-| Command                               | What it does                                                                                                                                                     |      Forge      |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------: |
-| `/gas:analyze [path] [--threshold N]` | Full analysis of a contract or directory. Builds, snapshots, inspects storage layouts, and reports all findings sorted by gas saving.                            |        ✅        |
-| `/gas:compare [ref1] [ref2]`          | Compares gas snapshots between two git refs (default: `HEAD~1` vs `HEAD`). Shows per-function delta and percent change, split into regressions and improvements. |        ✅        |
-| `/gas:baseline [--update\|--show X]`  | Manages the `.gas-snapshot` baseline. `--update` regenerates it; `--show X` filters to matching functions; no args prints the full summary table.                | `--update` only |
-| `/gas:explain <pattern>`              | EVM mechanic, exact gas numbers, before/after code, and when NOT to apply for any listed pattern.                                                                |        ❌        |
-| `/gas:watch [--off]`                  | Toggles per-edit gas annotation mode. While active, Claude appends a gas impact note after every Solidity edit. Session-scoped.                                  |        ❌        |
-
-### `--threshold` option for `/gas:analyze`
-
-Suppress findings below a minimum estimated gas saving. Useful on large codebases to focus on high-impact issues only:
-
-```
-/gas:analyze src/ --threshold 500
-```
-
-Default threshold is 100 gas — findings below this are suppressed unless overridden.
-
-### Accepted patterns for `/gas:explain`
-
-`cold-sload` · `slot-packing` · `unchecked` · `custom-errors` · `calldata` · `external-vs-public` · `immutable` · `loop-caching` · `unbounded-loop`
-
----
+Turn it off with `/decipher-gas-optimizoor:watch --off`.
 
 ## Skills — Auto-Applied
 
@@ -186,10 +189,6 @@ Two agents extend the plugin for longer or more complex sessions.
 
 Full-codebase audit agent. Applies all 11 skill domains systematically across every contract in `src/`, deduplicates findings, and produces a prioritized report with a suggested fix sequence ("patch these 3 first — highest impact, lowest risk"). Use before a mainnet deployment or a pre-audit gas pass.
 
-### `editor`
-
-Context-compression agent. When the context window fills during a long optimization session, this agent distills any skill domain into a ≤50-line summary so you can continue without losing the domain's key rules and gas numbers.
-
 ---
 
 ## Regression Hook
@@ -211,21 +210,10 @@ GAS_GUARD: REGRESSION DETECTED
 GAS_GUARD: -----------------------------------------
   ↑ VaultTest::testDeposit() (gas: 38400 → 39640 | 1240 3.228%)
 GAS_GUARD: -----------------------------------------
-GAS_GUARD: Threshold: 500 gas | Run /gas:analyze to investigate
+GAS_GUARD: Threshold: 500 gas | Run /decipher-gas-optimizoor:analyze to investigate
 ```
 
 The hook **always exits 0** — it never breaks or interrupts your Claude Code session. If forge is not found or no baseline exists, it exits silently.
-
-### Security and transparency
-
-The hook is a 42-line read-only bash script at [`hooks/scripts/gas-regression-guard.sh`](hooks/scripts/gas-regression-guard.sh). It:
-
-- Makes **no network calls**
-- **Writes no files** — read-only
-- Only reads `.gas-snapshot` and runs `forge snapshot --diff`
-- Silently exits 0 if forge is missing or no baseline exists
-
-You can read the entire script in 30 seconds before installation.
 
 ---
 
@@ -313,9 +301,9 @@ grep "evm_version" foundry.toml
 - Claude Code installed
 - A Solidity project with `foundry.toml`
 - Solidity `^0.8.4` or higher (for custom error support)
-- A committed `.gas-snapshot` baseline — created with `/gas:baseline --update`
+- A committed `.gas-snapshot` baseline — created with `/decipher-gas-optimizoor:baseline --update`
 
-The three commands that require forge are `analyze`, `compare`, and `baseline --update`. The `/gas:explain` and `/gas:watch` commands and all 11 skills work without forge.
+The three commands that require forge are `analyze`, `compare`, and `baseline --update`. The `/decipher-gas-optimizoor:explain` and `/decipher-gas-optimizoor:watch` commands and all 11 skills work without forge.
 
 ---
 

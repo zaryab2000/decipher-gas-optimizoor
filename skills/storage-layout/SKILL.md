@@ -230,6 +230,6 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You encounter an SL pattern (SL-004 through SL-010) not covered by the Quick Reference above, or need to verify an edge case |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and need to confirm completeness |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and need to confirm completeness |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and need the exact output format for a multi-finding DeFi vault example |
 | `docs/evm-gas-reference.md` | You need authoritative opcode costs (SSTORE, SLOAD, TSTORE) or slot packing rules to back a gas estimate |

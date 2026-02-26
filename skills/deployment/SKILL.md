@@ -166,7 +166,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need DP-004 (vanity address via CREATE2) details or full ERC-1167 clone implementation not shown above |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all deployment patterns were checked |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming all deployment patterns were checked |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a factory optimization finding |
 | `docs/evm-gas-reference.md` | You need authoritative opcode costs (SSTORE, CREATE, DELEGATECALL) to back a gas estimate |
 

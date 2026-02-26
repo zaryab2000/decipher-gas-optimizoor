@@ -165,6 +165,6 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need a UA-001 edge case (multiplication overflow proof, compound expression bounds) not covered by the Quick Reference |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming safety checks are complete |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming safety checks are complete |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact format for an unchecked finding |
 | `docs/evm-gas-reference.md` | You need the arithmetic opcode cost table (checked vs unchecked ADD/SUB/MUL) to back a gas estimate |

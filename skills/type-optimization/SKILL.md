@@ -151,7 +151,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need TY-004 (redundant downcast) edge cases or a TY-003 bitmap encoding example beyond what's shown above |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all type patterns were checked |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming all type patterns were checked |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-type finding |
 | `docs/evm-gas-reference.md` | You need slot packing rules or SSTORE costs to back a TY-002/TY-003 storage slot estimate |
 

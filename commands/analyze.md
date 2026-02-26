@@ -1,4 +1,4 @@
-# /gas:analyze [path]
+# /decipher-gas-optimizoor:analyze [path]
 
 Conduct a full gas optimization analysis on a Foundry Solidity project.
 

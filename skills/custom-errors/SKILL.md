@@ -120,6 +120,6 @@ Only read these files when explicitly needed — do not load both by default:
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need CE-003 typed-context examples or library/interface edge cases not covered above |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming every require/revert was audited |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming every require/revert was audited |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a multi-error contract finding |
 | `docs/evm-gas-reference.md` | You need the error handling cost comparison table (runtime vs bytecode costs) to back a gas estimate |

@@ -1,4 +1,4 @@
-# /gas:explain <pattern>
+# /decipher-gas-optimizoor:explain <pattern>
 
 Explain the EVM mechanic behind a specific gas optimization pattern with exact cost
 numbers, before/after code, and when NOT to apply it.

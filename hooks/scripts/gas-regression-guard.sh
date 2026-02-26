@@ -11,7 +11,7 @@ if ! command -v forge &>/dev/null; then
   echo "GAS_GUARD: forge not found, skipping"; exit 0
 fi
 if [ ! -f "$SNAPSHOT_PATH" ]; then
-  echo "GAS_GUARD: No baseline at $SNAPSHOT_PATH — run /gas:baseline --update"; exit 0
+  echo "GAS_GUARD: No baseline at $SNAPSHOT_PATH — run /decipher-gas-optimizoor:baseline --update"; exit 0
 fi
 
 # forge snapshot --diff exits non-zero on build failure; capture output regardless.
@@ -48,6 +48,6 @@ for regression_line in "${REGRESSIONS[@]}"; do
   echo "$regression_line"
 done
 echo "GAS_GUARD: -----------------------------------------"
-echo "GAS_GUARD: Threshold: ${THRESHOLD} gas | Run /gas:analyze to investigate"
+echo "GAS_GUARD: Threshold: ${THRESHOLD} gas | Run /decipher-gas-optimizoor:analyze to investigate"
 echo ""
 exit 0

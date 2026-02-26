@@ -88,7 +88,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need EV-002 indexed topic cost calculations or The Graph query impact examples |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all storage arrays were audited |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming all storage arrays were audited |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for a history-array finding |
 | `docs/evm-gas-reference.md` | You need LOG opcode costs or the SSTORE vs event gas comparison table |
 

@@ -1,11 +1,11 @@
-# /gas:watch
+# /decipher-gas-optimizoor:watch
 
 Toggle real-time gas annotation mode. When active, Claude appends a gas impact note
 after every Solidity edit it makes in the current session.
 
 ## Activation
 
-When the user runs `/gas:watch` (with no `--off` flag), output exactly:
+When the user runs `/decipher-gas-optimizoor:watch` (with no `--off` flag), output exactly:
 
 ```
 Gas Watch Mode: ACTIVE — I will annotate every Solidity edit with a gas impact note.
@@ -54,7 +54,7 @@ Estimated: -20 gas per call to setOwner() on the revert path; -~40,000 gas deplo
 
 ## Deactivation
 
-When the user runs `/gas:watch --off`, output exactly:
+When the user runs `/decipher-gas-optimizoor:watch --off`, output exactly:
 
 ```
 Gas Watch Mode: DEACTIVATED
@@ -70,4 +70,4 @@ an annotation.
 - Watch mode applies to Claude's own edits, not to code the user pastes or types.
 - Watch mode does not run forge or any external tool — annotations are static analysis
   based on the code change, not measured gas from a test run.
-- If forge measurement is needed, suggest running `/gas:analyze` or `/gas:compare`.
+- If forge measurement is needed, suggest running `/decipher-gas-optimizoor:analyze` or `/decipher-gas-optimizoor:compare`.

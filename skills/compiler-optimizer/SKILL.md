@@ -109,7 +109,7 @@ Only read these files when explicitly needed — do not load all three by defaul
 | File | Read only when… |
 |---|---|
 | `resources/PATTERNS.md` | You need the break-even calculation formula or full multi-profile `foundry.toml` examples beyond what's shown above |
-| `resources/CHECKLIST.md` | Producing a formal `/gas:analyze` report and confirming all compiler settings were reviewed |
+| `resources/CHECKLIST.md` | Producing a formal `/decipher-gas-optimizoor:analyze` report and confirming all compiler settings were reviewed |
 | `resources/EXAMPLE_FINDING.md` | Generating a report and needing the exact output format for an optimizer configuration finding |
 | `docs/evm-gas-reference.md` | You need EIP references or baseline opcode costs to contextualize compiler optimization impact |
 

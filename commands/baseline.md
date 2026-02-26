@@ -1,4 +1,4 @@
-# /gas:baseline
+# /decipher-gas-optimizoor:baseline
 
 Read, update, or query the `.gas-snapshot` file produced by `forge snapshot`.
 
@@ -16,7 +16,7 @@ Read `.gas-snapshot` in the current working directory.
 
 If the file does not exist, output:
 
-> No gas baseline found. Run `/gas:baseline --update` to create one.
+> No gas baseline found. Run `/decipher-gas-optimizoor:baseline --update` to create one.
 
 If the file exists, parse every line. Each line has the format:
 
@@ -99,7 +99,7 @@ Include a count at the end:
 ## Error handling
 
 - If `.gas-snapshot` exists but is empty: report "Gas snapshot file is empty. Run
-  `/gas:baseline --update` to populate it."
+  `/decipher-gas-optimizoor:baseline --update` to populate it."
 - If forge is not on PATH (for `--update` only): report install URL
   (https://getfoundry.sh) and stop.
 - Never create or write `.gas-snapshot` directly — only `forge snapshot` may write it.

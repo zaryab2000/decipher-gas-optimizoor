@@ -60,11 +60,11 @@ Depth goes in `resources/`, not in `SKILL.md`. Keep SKILL.md ≤250 lines.
 
 | Command | File | Forge required |
 |---|---|---|
-| `/gas:analyze [path]` | `commands/analyze.md` | Yes |
-| `/gas:compare [ref1] [ref2]` | `commands/compare.md` | Yes |
-| `/gas:baseline [--update\|--show X]` | `commands/baseline.md` | Yes |
-| `/gas:explain <pattern>` | `commands/explain.md` | No |
-| `/gas:watch [--off]` | `commands/watch.md` | No |
+| `/decipher-gas-optimizoor:analyze [path]` | `commands/analyze.md` | Yes |
+| `/decipher-gas-optimizoor:compare [ref1] [ref2]` | `commands/compare.md` | Yes |
+| `/decipher-gas-optimizoor:baseline [--update\|--show X]` | `commands/baseline.md` | Yes |
+| `/decipher-gas-optimizoor:explain <pattern>` | `commands/explain.md` | No |
+| `/decipher-gas-optimizoor:watch [--off]` | `commands/watch.md` | No |
 
 ## Skill Domains
 
