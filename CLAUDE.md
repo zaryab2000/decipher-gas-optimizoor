@@ -8,6 +8,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Implementation history:** `docs-internal/PRD_DEV.md` (phases 1–5) and `docs-internal/PRD_TEST.md` (phases 6–8). These are read-only references — implementation is complete.
 
+## Resources
+
+- [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
+- [Agent Skills](https://code.claude.com/docs/en/skills)
+- [Skill Authoring Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+
+For plugin/skill questions, use the `claude-code-guide` subagent — it has access to official documentation.
+
 ## Validation
 
 ```bash
@@ -31,10 +39,25 @@ agents/                  # gas-optimizer.md
 docs/                    # configuration.md, evm-gas-reference.md
 ```
 
-## Skill File Structure
+## Technical Reference
+
+### Frontmatter
+
+Every `skills/*/SKILL.md` requires three frontmatter fields:
+
+```yaml
+name: <domain-name>
+description: <trigger description — see Quality Standards below>
+allowed-tools: Read Bash
+```
+
+`allowed-tools` is a space-delimited string, not a YAML list.
+
+### Skill File Structure
 
 Every `skills/*/SKILL.md` must follow this exact 9-section structure (unnumbered headings):
-- YAML frontmatter — `name`, `description`, `allowed-tools` (space-delimited string, e.g. `allowed-tools: Read Bash`)
+
+- YAML frontmatter — `name`, `description`, `allowed-tools`
 - `## Purpose`
 - `## When to Use`
 - `## When NOT to Use`
@@ -46,7 +69,33 @@ Every `skills/*/SKILL.md` must follow this exact 9-section structure (unnumbered
 
 Supporting files per domain: `resources/PATTERNS.md`, `resources/CHECKLIST.md`, `resources/EXAMPLE_FINDING.md`.
 
-Depth goes in `resources/`, not in `SKILL.md`. Keep SKILL.md ≤250 lines.
+### Naming Conventions
+
+- Plugin and skill names: kebab-case, ≤64 characters
+- Skill `name` frontmatter must match the parent directory name exactly
+- Avoid vague names: `helper`, `utils`, `misc`
+
+## Quality Standards
+
+### Skill Description
+
+The `description` frontmatter field is what triggers the skill. It must be:
+
+- **Third-person voice**: "Detects X" not "I help with X"
+- **Trigger-specific**: "Use when writing struct definitions" not just "storage tool"
+- **Specific**: "Detects cold SLOAD from unbounded loops" not "helps with gas"
+
+### Content Organization
+
+- Keep SKILL.md ≤250 lines — depth goes in `resources/`, not in `SKILL.md`
+- Use progressive disclosure: quick reference and workflow first, full patterns on demand
+- `resources/` files are loaded only when explicitly needed — do not load all three by default
+- One level deep: SKILL.md links to resources files; resources files do not chain further
+
+### Gas Accuracy
+
+Do not invent gas rules. Every gas figure must be grounded in documented EVM mechanics
+(EIP-2929, EIP-1153, EIP-3529) and must be verifiable with `forge snapshot --diff`.
 
 ## Hook Constraints (non-negotiable)
 
@@ -70,7 +119,24 @@ Depth goes in `resources/`, not in `SKILL.md`. Keep SKILL.md ≤250 lines.
 
 11 domains, each a separate skill: `storage-layout` (SL), `loop-optimization` (LO), `calldata` (CD), `deployment` (DP), `type-optimization` (TY), `custom-errors` (CE), `compiler-optimizer` (CO), `immutable-and-constant` (IC), `unchecked-arithmetic` (UA), `visibility` (VI), `event-logging` (EV).
 
-Do not invent gas rules. All gas optimization content must be grounded in documented EVM mechanics (EIP-2929, EIP-1153, EIP-3529) and verifiable with `forge snapshot --diff`.
+## Contribution Checklist
+
+**Technical (validator checks these):**
+- [ ] `claude plugin validate .` passes with zero errors
+- [ ] Valid YAML frontmatter with `name`, `description`, `allowed-tools`
+- [ ] `name` matches the parent skill directory name
+- [ ] All referenced files exist (no broken `resources/` paths)
+
+**Quality (reviewer checks these):**
+- [ ] Description triggers correctly (third-person, trigger-specific, no vague language)
+- [ ] `## When to Use` and `## When NOT to Use` sections present
+- [ ] `## Rationalizations to Reject` present for high-stakes skills
+- [ ] Gas figures have EVM opcode or EIP citations
+- [ ] SKILL.md is ≤250 lines
+
+**Documentation:**
+- [ ] Supporting Docs table in SKILL.md lists all three resources files with load conditions
+- [ ] Hook changes: always exits 0, never writes files, tested in all 5 conditions
 
 ## Testing Gates
 
