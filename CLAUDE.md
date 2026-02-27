@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `decipher-gas-optimizoor` is a Claude Code plugin for automated Solidity gas optimization. Zero TypeScript, zero MCP, zero npm. The entire plugin is markdown skill files, markdown command files, and one bash hook script.
 
-**Implementation history:** `docs-internal/PRD_DEV.md` (phases 1–5) and `docs-internal/PRD_TEST.md` (phases 6–8). These are read-only references — implementation is complete.
-
 ## Resources
 
 - [Claude Code Plugins](https://code.claude.com/docs/en/plugins)
@@ -107,13 +105,13 @@ Do not invent gas rules. Every gas figure must be grounded in documented EVM mec
 
 ## Commands
 
-| Command | File | Forge required |
-|---|---|---|
-| `/decipher-gas-optimizoor:analyze [path]` | `commands/analyze.md` | Yes |
-| `/decipher-gas-optimizoor:compare [ref1] [ref2]` | `commands/compare.md` | Yes |
-| `/decipher-gas-optimizoor:baseline [--update\|--show X]` | `commands/baseline.md` | Yes |
-| `/decipher-gas-optimizoor:explain <pattern>` | `commands/explain.md` | No |
-| `/decipher-gas-optimizoor:watch [--off]` | `commands/watch.md` | No |
+| Command                                                  | File                   | Forge required |
+| -------------------------------------------------------- | ---------------------- | -------------- |
+| `/decipher-gas-optimizoor:analyze [path]`                | `commands/analyze.md`  | Yes            |
+| `/decipher-gas-optimizoor:compare [ref1] [ref2]`         | `commands/compare.md`  | Yes            |
+| `/decipher-gas-optimizoor:baseline [--update\|--show X]` | `commands/baseline.md` | Yes            |
+| `/decipher-gas-optimizoor:explain <pattern>`             | `commands/explain.md`  | No             |
+| `/decipher-gas-optimizoor:watch [--off]`                 | `commands/watch.md`    | No             |
 
 ## Skill Domains
 
@@ -142,14 +140,14 @@ Do not invent gas rules. Every gas figure must be grounded in documented EVM mec
 
 All gates passed. See `docs/TEST_LOGS.md` for full results.
 
-| Gate | What | Status |
-|------|------|--------|
-| G1 | `claude plugin validate .` zero errors | ✅ PASS |
-| G2 | Hook exits 0 in all 5 conditions | ✅ PASS |
-| G3 | All 5 commands produce correct output | ✅ PASS |
-| G4 | Each skill fires on its anti-pattern | ✅ PASS |
-| G5 | `GasAntiPatterns.sol` triggers ≥6 domain findings | ✅ PASS (8 findings) |
-| G6 | Regression guard fires and clears correctly | ✅ PASS |
+| Gate | What                                              | Status              |
+| ---- | ------------------------------------------------- | ------------------- |
+| G1   | `claude plugin validate .` zero errors            | ✅ PASS              |
+| G2   | Hook exits 0 in all 5 conditions                  | ✅ PASS              |
+| G3   | All 5 commands produce correct output             | ✅ PASS              |
+| G4   | Each skill fires on its anti-pattern              | ✅ PASS              |
+| G5   | `GasAntiPatterns.sol` triggers ≥6 domain findings | ✅ PASS (8 findings) |
+| G6   | Regression guard fires and clears correctly       | ✅ PASS              |
 
 ## Current State
 
