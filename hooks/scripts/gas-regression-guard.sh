@@ -4,6 +4,23 @@
 # configured threshold. Always exits 0 — never breaks the Claude Code session.
 set -euo pipefail
 
+# When invoked by Claude Code as a PostToolUse hook, stdin carries a JSON payload
+# with tool_input.file_path. The hook matcher only filters by tool name (Write|Edit),
+# so file-path filtering to src/**/*.sol happens here.
+if [ ! -t 0 ]; then
+  HOOK_INPUT="$(cat 2>/dev/null || true)"
+  if [ -n "$HOOK_INPUT" ]; then
+    if command -v jq >/dev/null 2>&1; then
+      FILE_PATH="$(printf '%s' "$HOOK_INPUT" | jq -r 'try .tool_input.file_path // empty' 2>/dev/null || true)"
+    else
+      FILE_PATH="$(printf '%s' "$HOOK_INPUT" | sed -n 's/.*"file_path"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n1)"
+    fi
+    if [ -n "$FILE_PATH" ] && [[ ! "$FILE_PATH" =~ (^|/)src/.*\.sol$ ]]; then
+      exit 0
+    fi
+  fi
+fi
+
 THRESHOLD="${GAS_REGRESSION_THRESHOLD:-500}"
 SNAPSHOT_PATH="${GAS_SNAPSHOT_PATH:-.gas-snapshot}"
 

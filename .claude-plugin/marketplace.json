@@ -1,11 +1,10 @@
 {
   "name": "decipher-gas-optimizoor",
   "version": "1.0.0",
-  "metadata": {
-    "description": "Gas optimization plugins for Foundry-based Solidity projects — automated regression detection, 11 optimization skill domains, and 5 analysis commands."
-  },
+  "description": "Gas optimization plugins for Foundry-based Solidity projects — automated regression detection, 11 optimization skill domains, and 5 analysis commands.",
   "owner": {
     "name": "Zaryab",
+    "email": "zaryabafser2000@gmail.com",
     "url": "https://github.com/zaryab2000"
   },
   "plugins": [
@@ -14,10 +13,12 @@
       "version": "1.0.0",
       "description": "Automated gas optimization and regression detection for Foundry-based Solidity projects",
       "source": {
-        "source": "url",
-        "url": "https://github.com/zaryab2000/decipher-gas-optimizoor.git"
+        "source": "github",
+        "repo": "zaryab2000/decipher-gas-optimizoor"
       },
-      "tags": [
+      "homepage": "https://github.com/zaryab2000/decipher-gas-optimizoor",
+      "license": "MIT",
+      "keywords": [
         "solidity",
         "gas",
         "foundry",
@@ -25,7 +26,6 @@
         "defi",
         "optimization"
       ],
-      "homepage": "https://github.com/zaryab2000/decipher-gas-optimizoor",
       "author": {
         "name": "Zaryab",
         "url": "https://github.com/zaryab2000"

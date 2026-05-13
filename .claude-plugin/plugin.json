@@ -1,9 +1,22 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "decipher-gas-optimizoor",
   "version": "1.0.0",
   "description": "Analyzes Solidity smart contracts for gas inefficiencies. Detects storage packing gaps, loop anti-patterns, custom error opportunities, visibility mismatches, unchecked arithmetic, calldata vs memory decisions, and deployment cost issues. Enforces gas regression detection on every file save via forge integration.",
   "author": {
     "name": "Zaryab",
-    "email": "zaryabafser2000@gmail.com"
-  }
+    "email": "zaryabafser2000@gmail.com",
+    "url": "https://github.com/zaryab2000"
+  },
+  "homepage": "https://github.com/zaryab2000/decipher-gas-optimizoor",
+  "repository": "https://github.com/zaryab2000/decipher-gas-optimizoor",
+  "license": "MIT",
+  "keywords": [
+    "solidity",
+    "gas",
+    "foundry",
+    "evm",
+    "defi",
+    "optimization"
+  ]
 }
