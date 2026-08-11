@@ -1,3 +1,6 @@
+
+</think>
+
 # decipher-gas-optimizoor
 
 ![version](https://img.shields.io/badge/version-1.0.0-blue)
@@ -19,15 +22,8 @@ All you need to optimize your smart contracts.
 
 Inside Claude Code, run:
 
-**Step 1: Add the marketplace**
 ```
-/plugin marketplace add zaryab2000/decipher-gas-optimizoor
-```
-
-**Step 2: Install the marketplace**
-
-```
-/plugin install decipher-gas-optimizoor@decipher-gas-optimizoor-marketplace
+/plugin add zaryab2000/decipher-gas-optimizoor
 ```
 
 ---
